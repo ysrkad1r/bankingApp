@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.interfaces.Logoutable;
+import org.example.interfaces.MainFrameView;
 import org.example.interfaces.Resettable;
 import org.example.model.Account;
 import org.example.model.Customer;
@@ -10,7 +11,9 @@ import org.example.service.AccountService;
 import org.example.service.CustomerService;
 import org.example.service.EmployeeService;
 import org.example.session.SessionManager;
-import org.example.ui.*;
+import org.example.ui.common.LoginPanel;
+import org.example.ui.customer.*;
+import org.example.ui.employee.EmployeeMainFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,20 +25,38 @@ public class BankController {
     private final EmployeeService employeeService = new EmployeeService();
 
 
-    public void resetFieldsAndNavigateToMenu(Resettable panel, MainFrame frame) {
+    public void resetFieldsAndNavigateToMenu(Resettable panel, MainFrameView frame) {
         panel.resetFields();
         frame.showPanel("menu");
     }
 
 
-    //burada giris yapanin turune gore giris yapilmasi saglanacak sonucta
-    // basilan butona gore musteri ya da personel girisi yapilacak
-    public boolean handleLogin(String email, String password, LoginPanel parentComponent, MainFrame frame) {
-        boolean statusOfLogin = customerService.loginCustomer(email, password);
+    public boolean handleLogin(String email, String password, LoginPanel parentComponent, MainFrameView frame, String entryType) {
+        boolean statusOfLogin = false;
+        if (entryType.equals("customer")) {
+            statusOfLogin = customerService.loginCustomer(email, password);
+        }else if(entryType.equals("employee")) {
+            statusOfLogin = employeeService.loginEmployee(email, password);
+        }
         if (statusOfLogin) {
             JOptionPane.showMessageDialog(parentComponent, "Login Successful");
-            frame.showPanel("menu");
-            SessionManager.getInstance().login(customerService.getCustomerDAO().getCustomerByEmail(email));
+            if (entryType.equals("customer")) {
+                SessionManager.getInstance().login(customerService.getCustomerDAO().getCustomerByEmail(email));
+                frame.showPanel("menu");
+            }else{
+                SessionManager.getInstance().login(employeeService.getEmployeeDao().getEmployeeByEmail(email));
+                //eski pencereyi oldur
+                if (frame instanceof JFrame) {
+                    ((JFrame) frame).dispose();
+                }
+
+                // Yeni pencereyi başlat
+                SwingUtilities.invokeLater(() -> {
+                    EmployeeMainFrame employeeMainFrame = new EmployeeMainFrame();
+                    employeeMainFrame.setVisible(true);
+                });
+                frame.showPanel("employeeMenuPanel");
+            }
             parentComponent.resetFields();
         } else {
             JOptionPane.showMessageDialog(parentComponent, "Login Failed, invalid email or password");
@@ -45,7 +66,7 @@ public class BankController {
     }
 
 
-    public void handleLogout(Logoutable parentComponent, MainFrame frame) {
+    public void handleLogout(Logoutable parentComponent, MainFrameView frame) {
         JOptionPane.showMessageDialog((Component) parentComponent, "LogOut Successful!");
         SessionManager.getInstance().logOut();
         frame.getLoginPanel().resetFields();

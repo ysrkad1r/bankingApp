@@ -1,4 +1,4 @@
-package org.example.ui;
+package org.example.ui.customer;
 
 import org.example.controller.BankController;
 import org.example.interfaces.Logoutable;

@@ -1,11 +1,16 @@
-package org.example.ui;
+package org.example.ui.customer;
 
 import org.example.controller.BankController;
+import org.example.interfaces.CustomerFrameView;
+import org.example.interfaces.MainFrameView;
+import org.example.model.Customer;
+import org.example.ui.common.ChoiceEntryTypePanel;
+import org.example.ui.common.LoginPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements CustomerFrameView {
     BankController bankController = new BankController();
 
     public ChoiceEntryTypePanel choiceEntryTypePanel = new ChoiceEntryTypePanel(this, bankController);
@@ -25,7 +30,7 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        setLayout(new CardLayout());
+        setLayout(new CardLayout(10,10));
         getContentPane().add(choiceEntryTypePanel, "entryType");
         getContentPane().add(loginPanel, "login");
         getContentPane().add(menuPanel, "menu");

@@ -1,13 +1,6 @@
 package org.example.app;
 
-import org.example.model.Customer;
-import org.example.model.Employee;
-import org.example.model.enums.AccountType;
-import org.example.model.enums.EmployeeType;
-import org.example.service.AccountService;
-import org.example.service.CustomerService;
-import org.example.service.EmployeeService;
-import org.example.ui.MainFrame;
+import org.example.ui.customer.MainFrame;
 import javax.swing.*;
 
 public class BankCoreApp {

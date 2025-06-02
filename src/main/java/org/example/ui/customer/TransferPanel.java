@@ -1,4 +1,4 @@
-package org.example.ui;
+package org.example.ui.customer;
 
 import net.miginfocom.swing.MigLayout;
 import org.example.controller.BankController;
@@ -7,7 +7,6 @@ import org.example.model.Account;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 public class TransferPanel extends JPanel implements Resettable {

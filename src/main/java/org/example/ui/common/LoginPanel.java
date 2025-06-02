@@ -1,20 +1,24 @@
-package org.example.ui;
+package org.example.ui.common;
 
 import net.miginfocom.swing.MigLayout;
 import org.example.controller.BankController;
-import org.example.model.Account;
+import org.example.interfaces.CustomerFrameView;
+import org.example.interfaces.MainFrameView;
+import org.example.ui.customer.MainFrame;
+import org.example.ui.customer.ShowUserAccountsPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class LoginPanel extends JPanel {
     private JTextField emailField;
     private JPasswordField passwordField;
     private JButton loginButton;
     public ShowUserAccountsPanel showUserAccountsPanel;
+    private JButton backToChoiceEntryTypeButton;
+    private String entryType;
 
-    public LoginPanel(MainFrame frame , BankController controller) {
+    public LoginPanel(MainFrameView frame , BankController controller) {
         setLayout(new MigLayout("insets 30", "[][grow,fill]", "[]20[]20[]"));
 
         JLabel emailLabel = new JLabel("Email: ");
@@ -27,6 +31,10 @@ public class LoginPanel extends JPanel {
         passwordField = new JPasswordField(20);
 
         loginButton = new JButton("Login");
+        loginButton.setFont(loginButton.getFont().deriveFont(Font.BOLD,16));
+
+        backToChoiceEntryTypeButton = new JButton("Back To Choice Entry Type ");
+        backToChoiceEntryTypeButton.setFont(new Font(Font.SERIF, Font.PLAIN, 16));
 
         add(emailLabel);
         add(emailField, "growx, height 40!, wrap");
@@ -37,11 +45,23 @@ public class LoginPanel extends JPanel {
         add(new JLabel());
         add(loginButton, "right, height 30!, wrap");
 
+        add(new JLabel());
+        add(backToChoiceEntryTypeButton,"right, height 30!, wrap");
+
         loginButton.addActionListener(e -> {
-            boolean status = controller.handleLogin(getEmail(),getPassword(),this, frame);
+            boolean status = controller.handleLogin(getEmail(),getPassword(),this, frame, entryType);
             if (status) {
-                frame.showUserAccountsView();
+                if ("customer".equals(entryType) && frame instanceof CustomerFrameView) {
+                    ((CustomerFrameView) frame).showUserAccountsView();
+                }else {
+                    //sadece employeeler icin yapilmasi gereken islemleri bu asamada
+                }
             }
+        });
+
+        backToChoiceEntryTypeButton.addActionListener(e -> {
+           resetFields();
+           frame.showPanel("entryType");
         });
     }
 
@@ -55,6 +75,14 @@ public class LoginPanel extends JPanel {
 
     public JButton getLoginButton() {
         return loginButton;
+    }
+
+    public String getEntryType() {
+        return entryType;
+    }
+
+    public void setEntryType(String entryType) {
+        this.entryType = entryType;
     }
 
     public void resetFields(){
