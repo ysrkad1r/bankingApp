@@ -1,0 +1,184 @@
+package org.example.controller;
+
+import org.example.interfaces.Logoutable;
+import org.example.interfaces.Resettable;
+import org.example.model.Account;
+import org.example.model.Customer;
+import org.example.model.Employee;
+import org.example.model.enums.AccountType;
+import org.example.service.AccountService;
+import org.example.service.CustomerService;
+import org.example.service.EmployeeService;
+import org.example.session.SessionManager;
+import org.example.ui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+
+public class BankController {
+    private final CustomerService customerService = new CustomerService();
+    private final AccountService accountService = new AccountService();
+    private final EmployeeService employeeService = new EmployeeService();
+
+
+    public void resetFieldsAndNavigateToMenu(Resettable panel, MainFrame frame) {
+        panel.resetFields();
+        frame.showPanel("menu");
+    }
+
+
+    //burada giris yapanin turune gore giris yapilmasi saglanacak sonucta
+    // basilan butona gore musteri ya da personel girisi yapilacak
+    public boolean handleLogin(String email, String password, LoginPanel parentComponent, MainFrame frame) {
+        boolean statusOfLogin = customerService.loginCustomer(email, password);
+        if (statusOfLogin) {
+            JOptionPane.showMessageDialog(parentComponent, "Login Successful");
+            frame.showPanel("menu");
+            SessionManager.getInstance().login(customerService.getCustomerDAO().getCustomerByEmail(email));
+            parentComponent.resetFields();
+        } else {
+            JOptionPane.showMessageDialog(parentComponent, "Login Failed, invalid email or password");
+            parentComponent.resetFields();
+        }
+        return statusOfLogin;
+    }
+
+
+    public void handleLogout(Logoutable parentComponent, MainFrame frame) {
+        JOptionPane.showMessageDialog((Component) parentComponent, "LogOut Successful!");
+        SessionManager.getInstance().logOut();
+        frame.getLoginPanel().resetFields();
+    }
+
+
+    public boolean handleDepositMoney(String rawAccountId, String rawAmountOfMoney, DepositPanel parentComponent) {
+        boolean statusOfDeposit = false;
+        if (rawAccountId.isEmpty() || rawAmountOfMoney.isEmpty()){
+            JOptionPane.showMessageDialog(parentComponent,"Please enter a valid account ID and amount to deposit!");
+            return statusOfDeposit;
+        }
+
+        int accountId = Integer.parseInt(rawAccountId);
+        double amountOfMoney = Double.parseDouble(rawAmountOfMoney);
+
+        try {
+            if (amountOfMoney >= 0 &&  accountId > 0){
+                statusOfDeposit = accountService.depositMoney(accountId, amountOfMoney);
+                if (statusOfDeposit){
+                    JOptionPane.showMessageDialog(parentComponent,"Deposit successful!");
+                }else {
+                    JOptionPane.showMessageDialog(parentComponent,"Deposit failed!");
+                }
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(parentComponent,"Please enter a valid account ID! Try again!");
+        }
+        parentComponent.resetFields();
+        return statusOfDeposit;
+    }
+
+
+    public boolean handleWithdrawMoney(String rawAccountId, String rawAmountOfMoney, WithdrawPanel parentComponent ){
+        boolean statusOfWithdraw = false;
+        if (rawAccountId.isEmpty() || rawAmountOfMoney.isEmpty()){
+            JOptionPane.showMessageDialog(parentComponent,"Please enter a valid account ID and amount to withdraw!");
+            return statusOfWithdraw;
+        }
+
+        int accountId = Integer.parseInt(rawAccountId);
+        double amountOfMoney = Double.parseDouble(rawAmountOfMoney);
+
+        try {
+            if (amountOfMoney >= 0 &&  accountId > 0){
+                statusOfWithdraw = accountService.withdrawMoney(accountId, amountOfMoney);
+                if (statusOfWithdraw){
+                    JOptionPane.showMessageDialog(parentComponent,"Withdraw successful!");
+                }else {
+                    JOptionPane.showMessageDialog(parentComponent,"Withdraw failed!");
+                }
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(parentComponent,"Please enter a valid account ID! Try again!");
+        }
+        parentComponent.resetFields();
+        return statusOfWithdraw;
+    }
+
+
+    public void handleMoneyTransfer(String rawSenderAccountId, String rawReceiverAccountId, String rawAmountMoney, TransferPanel parentComponent) {
+        boolean statusOfTransfer = false;
+        if (rawAmountMoney.isEmpty() || rawSenderAccountId.isEmpty() || rawReceiverAccountId.isEmpty() ){
+            JOptionPane.showMessageDialog(parentComponent,"Please enter valid Account id's and money amount to transfer!");
+        }
+
+        int senderAccountId = Integer.parseInt(rawSenderAccountId);
+        int receiverAccountId = Integer.parseInt(rawReceiverAccountId);
+        double amountOfMoney = Double.parseDouble(rawAmountMoney);
+
+        if (amountOfMoney >= 0 &&  senderAccountId > 0 && receiverAccountId > 0){
+            statusOfTransfer = accountService.transferMoney(senderAccountId, receiverAccountId, amountOfMoney);
+            if (statusOfTransfer){
+                JOptionPane.showMessageDialog(parentComponent,"Transfer successful!");
+            }else {
+                JOptionPane.showMessageDialog(parentComponent,"Transfer failed!");
+            }
+        }
+        parentComponent.resetFields();
+    }
+
+
+    public List<Account> getAccountsForCurrentCustomer() {
+        try {
+            int currentCustomerId = 1;
+            if (SessionManager.getInstance().isLoggedIn()){
+                currentCustomerId = SessionManager.getInstance().getLoggedInUser().getId();
+            }
+            List<Account> accountList = accountService.getAccountDAO().getAccountById(currentCustomerId);
+            System.out.println(currentCustomerId);
+            return accountList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public void handleCreateAccount(Customer customer, AccountType accountType, double amount) {
+        boolean statusOfInserting = accountService.createAccount(customer, accountType, amount);
+        if (statusOfInserting){
+            System.out.println("Account created successfully");
+        }else{
+            System.out.println("Account creation failed");
+        }
+    }
+
+
+    //it will be unnecessary maybe it will be checked
+    public void handleRegisterCustomer(Customer customer) {
+        boolean statusOfInserting = customerService.registerCustomer(customer.getFullName(),customer.getEmail(),customer.getPassword());
+        if (statusOfInserting){
+            System.out.println("Customer registered successfully");
+        }else {
+            System.out.println("Customer registration failed");
+        }
+    }
+
+
+    //it will be unnecessary maybe it will be checked
+    public void handleRegisterEmployee(Employee employee) {
+        boolean statusOfInserting = employeeService.registerEmployee(employee.getName(),employee.getEmail(),employee.getPassword(),employee.getEmployeeType());
+        if (statusOfInserting){
+            System.out.println("Employee registered successfully");
+        }else {
+            System.out.println("Employee registration failed");
+        }
+    }
+
+
+    // Customer girisi yapildiysa customer veritabaninda , Employee girisi
+    // secildiyse employee veritabaninda checking yapilmasini saglayan method bu olacan
+    public void setEntryTypeChoice(){
+
+    }
+}
