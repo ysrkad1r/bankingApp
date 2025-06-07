@@ -37,7 +37,7 @@ public class EmployeeService {
         if (employee == null) {return false;}
 
         if (PasswordUtil.checkPassword(password, employee.getPassword())) {
-            SessionManager<Employee> employeeSession = SessionManager.getInstance();
+            SessionManager employeeSession = SessionManager.getInstance();
             employeeSession.setLoggedInUser(employee);
             return true;
         }

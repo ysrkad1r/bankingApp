@@ -1,6 +1,7 @@
 package org.example.model;
 
 import org.example.interfaces.User;
+import org.example.model.enums.UserType;
 
 public class Customer implements User {
     private int id;
@@ -44,6 +45,11 @@ public class Customer implements User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public UserType getUserType() {
+        return UserType.CUSTOMER;
     }
 
     @Override

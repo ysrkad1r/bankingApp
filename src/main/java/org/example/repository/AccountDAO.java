@@ -150,4 +150,26 @@ public class AccountDAO {
         }
         return status;
     }
+
+    public boolean deleteAccount(int accountId) {
+        Connection conn = null;
+
+        try {
+            conn = DBConnection.getConnection();
+            if (conn != null) {
+                String sql = "DELETE FROM accounts WHERE id = ?";
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, accountId);
+                pstmt.executeUpdate();
+                System.out.println("Account deleted Successfully ! ");
+                pstmt.close();
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBConnection.closeConnection(conn);
+        }
+        return false;
+    }
 }

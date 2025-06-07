@@ -20,5 +20,22 @@ public class EmployeeMenuPanel extends JPanel {
         add(createAccountButton);
         add(deleteAccountButton);
         add(listAccountsButton);
+
+
+        createAccountButton.addActionListener(e -> {
+            frame.showPanel("createAccountPanel");
+        });
+
+        deleteAccountButton.addActionListener(e -> {
+           frame.showPanel("deleteAccountPanel");
+        });
+
+        addCustomerButton.addActionListener(e -> {
+           frame.showPanel("addCustomerPanel");
+        });
+
+        deleteCustomerButton.addActionListener(e -> {
+            frame.showPanel("deleteCustomerPanel");
+        });
     }
 }

@@ -16,7 +16,9 @@ public class EmployeeMainFrame extends JFrame implements EmployeeFrameView {
     public LoginPanel loginPanel = new LoginPanel(this, bankController);
     public EmployeeMenuPanel employeeMenuPanel = new EmployeeMenuPanel(this,bankController);
     public AddCustomerPanel addCustomerPanel = new AddCustomerPanel(this, bankController);
-
+    public DeleteCustomerPanel deleteCustomerPanel = new DeleteCustomerPanel(this, bankController);
+    public CreateAccountPanel createAccountPanel = new CreateAccountPanel(this, bankController);
+    public DeleteAccountPanel deleteAccountPanel = new DeleteAccountPanel(this, bankController);
 
     public EmployeeMainFrame() {
         setTitle("Employee");
@@ -28,6 +30,9 @@ public class EmployeeMainFrame extends JFrame implements EmployeeFrameView {
         setLayout(new CardLayout(10, 10));
         add(employeeMenuPanel,"employeeMenuPanel");
         add(addCustomerPanel, "addCustomerPanel");
+        add(deleteCustomerPanel, "deleteCustomerPanel");
+        add(createAccountPanel, "createAccountPanel");
+        add(deleteAccountPanel, "deleteAccountPanel");
 
     }
 

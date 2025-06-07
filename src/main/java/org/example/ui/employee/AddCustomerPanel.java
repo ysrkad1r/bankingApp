@@ -4,11 +4,12 @@ import net.miginfocom.swing.MigLayout;
 import org.example.controller.BankController;
 import org.example.interfaces.MainFrameView;
 import org.example.interfaces.Resettable;
+import org.example.model.Customer;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class AddCustomerPanel extends JPanel {
+public class AddCustomerPanel extends JPanel implements Resettable {
     private JTextField fullNameField;
     private JTextField emailField;
     private JPasswordField passwordField;
@@ -56,8 +57,25 @@ public class AddCustomerPanel extends JPanel {
 
         add(new JLabel());
         add(backToMainMenuButton, "height 40! , wrap , grow");
+
+        addCustomerButton.addActionListener(e -> {
+            String fullName = fullNameField.getText();
+            String email = emailField.getText();
+            String password = String.valueOf(passwordField.getPassword());
+            Customer customer = new Customer(fullName, email, password);
+            bankController.handleRegisterCustomer(customer);
+        });
+
+        backToMainMenuButton.addActionListener(e -> {
+            bankController.resetFieldsAndNavigateToMenu(this,frame);
+        });
     }
 
 
-
+    @Override
+    public void resetFields() {
+        fullNameField.setText("");
+        emailField.setText("");
+        passwordField.setText("");
+    }
 }

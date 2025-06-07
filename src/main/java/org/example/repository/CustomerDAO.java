@@ -80,4 +80,26 @@ public class CustomerDAO {
         }
     }
 
+    public boolean deleteCustomer(int customerId) {
+        Connection conn = null;
+
+        try {
+            conn = DBConnection.getConnection();
+            if (conn != null) {
+                String sql = "DELETE FROM customers WHERE id = ?";
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, customerId);
+                pstmt.executeUpdate();
+                System.out.println("User deleted Successfully ! ");
+                pstmt.close();
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBConnection.closeConnection(conn);
+        }
+        return false;
+    }
+
 }

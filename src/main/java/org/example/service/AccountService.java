@@ -18,8 +18,8 @@ public class AccountService {
     }
 
 
-    public boolean createAccount(Customer customer, AccountType accountType, double amount) {
-        Account newAccount = new Account(customer.getId(), accountType, amount);
+    public boolean createAccount(int customerId, AccountType accountType, double amount) {
+        Account newAccount = new Account(customerId, accountType, amount);
         boolean statusOfInsertingAccount = false;
         if(accountDAO.getAccountById(newAccount.getCustomerId()).isEmpty()) {
             accountDAO.insertAccount(newAccount);
@@ -65,6 +65,16 @@ public class AccountService {
             this.transactionService.recordTransaction(fromAccountId,toAccountId, TransactionType.TRANSFER, amount, TransactionStatusType.FAILURE);
         }
         return statusOfTransfer;
+    }
+
+    public boolean deleteAccount(int accountId) {
+        boolean status = accountDAO.deleteAccount(accountId);
+        if(status) {
+            System.out.println("Account deleted successfully");
+        }else {
+            System.out.println("Account deletion failed");
+        }
+        return status;
     }
 
 

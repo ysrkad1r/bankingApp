@@ -3,10 +3,12 @@ package org.example.controller;
 import org.example.interfaces.Logoutable;
 import org.example.interfaces.MainFrameView;
 import org.example.interfaces.Resettable;
+import org.example.interfaces.User;
 import org.example.model.Account;
 import org.example.model.Customer;
 import org.example.model.Employee;
 import org.example.model.enums.AccountType;
+import org.example.model.enums.UserType;
 import org.example.service.AccountService;
 import org.example.service.CustomerService;
 import org.example.service.EmployeeService;
@@ -27,7 +29,12 @@ public class BankController {
 
     public void resetFieldsAndNavigateToMenu(Resettable panel, MainFrameView frame) {
         panel.resetFields();
-        frame.showPanel("menu");
+        User user = SessionManager.getInstance().getLoggedInUser();
+        if (user.getUserType() == UserType.EMPLOYEE) {
+            frame.showPanel("employeeMenuPanel");
+        }else {
+            frame.showPanel("menu");
+        }
     }
 
 
@@ -165,13 +172,14 @@ public class BankController {
     }
 
 
-    public void handleCreateAccount(Customer customer, AccountType accountType, double amount) {
-        boolean statusOfInserting = accountService.createAccount(customer, accountType, amount);
+    public boolean handleCreateAccount(int customerId, AccountType accountType, double amount) {
+        boolean statusOfInserting = accountService.createAccount(customerId, accountType, amount);
         if (statusOfInserting){
             System.out.println("Account created successfully");
         }else{
             System.out.println("Account creation failed");
         }
+        return statusOfInserting;
     }
 
 
@@ -185,6 +193,13 @@ public class BankController {
         }
     }
 
+    public void deleteCustomer(int customerId) {
+        customerService.deleteCustomer(customerId);
+    }
+
+    public boolean deleteAccount(int accountId) {
+        return accountService.deleteAccount(accountId);
+    }
 
     //it will be unnecessary maybe it will be checked
     public void handleRegisterEmployee(Employee employee) {

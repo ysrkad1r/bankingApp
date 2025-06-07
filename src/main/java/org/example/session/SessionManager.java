@@ -1,35 +1,50 @@
 package org.example.session;
 
+import org.example.model.enums.UserType;
 import org.example.interfaces.User;
 
-public class SessionManager<T extends User> {
-    private static SessionManager<?> instance;
-    private T loggedInUser;
+public class SessionManager {
+    private static SessionManager instance;
+    private UserType currentUserType;
+    private User currentUser;
 
-    public static <T extends User>SessionManager<T> getInstance() {
+    private SessionManager() {}
+
+    public static SessionManager getInstance() {
         if (instance == null) {
-            instance = new SessionManager<>();
+            instance = new SessionManager();
         }
-        return (SessionManager<T>) instance;
+        return instance;
     }
 
-    public void login(T user) {
-        setLoggedInUser(user);
+    public void login(User user) {
+        this.currentUser = user;
+        this.currentUserType = user.getUserType();
     }
 
-    public void logOut(){
-        setLoggedInUser(null);
+    public void logOut() {
+        this.currentUser = null;
+        this.currentUserType = null;
+    }
+
+    public UserType getCurrentUserType() {
+        return currentUserType;
+    }
+
+    public User getLoggedInUser() {
+        return currentUser;
+    }
+
+    public void setLoggedInUser(User user) {
+        this.currentUser = user;
+    }
+
+    // Opsiyonel: Kullanıcıyı belirli tipe cast eden yardımcı method
+    public <T extends User> T getLoggedInUserAs(Class<T> clazz) {
+        return clazz.cast(currentUser);
     }
 
     public boolean isLoggedIn() {
-        return loggedInUser != null;
-    }
-
-    public T getLoggedInUser() {
-        return loggedInUser;
-    }
-
-    public void setLoggedInUser(T loggedInUser) {
-        this.loggedInUser = loggedInUser;
+        return currentUser != null;
     }
 }

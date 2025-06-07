@@ -2,6 +2,7 @@ package org.example.model;
 
 import org.example.interfaces.User;
 import org.example.model.enums.EmployeeType;
+import org.example.model.enums.UserType;
 
 public class Employee implements User {
     private int id;
@@ -55,6 +56,11 @@ public class Employee implements User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public UserType getUserType() {
+        return UserType.EMPLOYEE;
     }
 
     @Override
