@@ -31,10 +31,10 @@ public class DeleteAccountPanel extends JPanel implements Resettable {
         add(accountIdField,"wrap,height 40!,grow");
 
         add(new JLabel());
-        add(deleteAccountButton);
+        add(deleteAccountButton,"wrap,height 40!,grow");
 
         add(new JLabel());
-        add(backToMainMenuButton);
+        add(backToMainMenuButton,"wrap,height 40!,grow");
 
         deleteAccountButton.addActionListener(e -> {
             int accountId = Integer.parseInt(accountIdField.getText());
