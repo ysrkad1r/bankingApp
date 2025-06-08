@@ -8,7 +8,9 @@ public class SessionManager {
     private UserType currentUserType;
     private User currentUser;
 
-    private SessionManager() {}
+    private SessionManager() {
+
+    }
 
     public static SessionManager getInstance() {
         if (instance == null) {

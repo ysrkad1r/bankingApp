@@ -24,7 +24,7 @@ public class MenuPanel extends JPanel implements Logoutable {
 
 
         logoutButton.addActionListener(e -> {
-            bankController.handleLogout(this,frame);
+            bankController.handleLogout(frame);
             frame.showPanel("login");
         });
 

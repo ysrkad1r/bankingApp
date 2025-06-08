@@ -4,18 +4,16 @@ import net.miginfocom.swing.MigLayout;
 import org.example.controller.BankController;
 import org.example.interfaces.CustomerFrameView;
 import org.example.interfaces.MainFrameView;
-import org.example.ui.customer.MainFrame;
 import org.example.ui.customer.ShowUserAccountsPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class LoginPanel extends JPanel {
-    private JTextField emailField;
-    private JPasswordField passwordField;
-    private JButton loginButton;
+    private final JTextField emailField;
+    private final JPasswordField passwordField;
+    private final JButton loginButton;
     public ShowUserAccountsPanel showUserAccountsPanel;
-    private JButton backToChoiceEntryTypeButton;
     private String entryType;
 
     public LoginPanel(MainFrameView frame , BankController controller) {
@@ -24,17 +22,25 @@ public class LoginPanel extends JPanel {
         JLabel emailLabel = new JLabel("Email: ");
         emailLabel.setFont(emailLabel.getFont().deriveFont(Font.BOLD,16));
         emailField = new JTextField(20);
+        emailField.setBorder(BorderFactory.createCompoundBorder(
+                emailField.getBorder(),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
         emailField.setFont(new Font(Font.SERIF, Font.PLAIN, 16));
 
         JLabel passwordLabel = new JLabel("Password: ");
         passwordLabel.setFont(passwordLabel.getFont().deriveFont(Font.BOLD,16));
         passwordField = new JPasswordField(20);
+        passwordField.setBorder(BorderFactory.createCompoundBorder(
+           passwordField.getBorder(),
+           BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
 
         loginButton = new JButton("Login");
         loginButton.setFont(loginButton.getFont().deriveFont(Font.BOLD,16));
 
-        backToChoiceEntryTypeButton = new JButton("Back To Choice Entry Type ");
-        backToChoiceEntryTypeButton.setFont(new Font(Font.SERIF, Font.PLAIN, 16));
+        JButton backToChoiceEntryTypeButton = new JButton("Back To Choice Entry Type ");
+        backToChoiceEntryTypeButton.setFont(new Font(Font.SERIF, Font.BOLD, 16));
 
         add(emailLabel);
         add(emailField, "growx, height 40!, wrap");

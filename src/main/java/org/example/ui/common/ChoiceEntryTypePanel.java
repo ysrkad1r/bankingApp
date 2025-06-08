@@ -10,6 +10,7 @@ import java.awt.*;
 public class ChoiceEntryTypePanel extends JPanel {
     private JButton employeeLoginButton;
     private JButton customerLoginButton;
+    //private JButton adminLoginButton;
 
     public ChoiceEntryTypePanel(MainFrameView frame , BankController bankController) {
         setLayout(new GridLayout(2,1));
@@ -20,8 +21,12 @@ public class ChoiceEntryTypePanel extends JPanel {
         customerLoginButton = new JButton("Customer Login");
         customerLoginButton.setFont(new Font("Sans", Font.BOLD, 16));
 
+        //adminLoginButton = new JButton("Admin Login");
+        //adminLoginButton.setFont(new Font("Sans", Font.BOLD, 16));
+
         add(employeeLoginButton);
         add(customerLoginButton);
+        //add(adminLoginButton);
 
         employeeLoginButton.addActionListener(e -> {
            frame.getLoginPanel().setEntryType("employee");
@@ -32,6 +37,11 @@ public class ChoiceEntryTypePanel extends JPanel {
             frame.getLoginPanel().setEntryType("customer");
             frame.showPanel("login");
         });
+
+        //adminLoginButton.addActionListener(e -> {
+        //   frame.getLoginPanel().setEntryType("admin");
+        //   frame.showPanel("login");
+        //});
 
     }
 }

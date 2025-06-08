@@ -68,13 +68,7 @@ public class AccountService {
     }
 
     public boolean deleteAccount(int accountId) {
-        boolean status = accountDAO.deleteAccount(accountId);
-        if(status) {
-            System.out.println("Account deleted successfully");
-        }else {
-            System.out.println("Account deletion failed");
-        }
-        return status;
+        return accountDAO.deleteAccount(accountId);
     }
 
 

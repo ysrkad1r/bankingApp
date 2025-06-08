@@ -2,7 +2,6 @@ package org.example.ui.employee;
 
 import org.example.controller.BankController;
 import org.example.interfaces.EmployeeFrameView;
-import org.example.interfaces.MainFrameView;
 import org.example.ui.common.ChoiceEntryTypePanel;
 import org.example.ui.common.LoginPanel;
 
@@ -19,6 +18,8 @@ public class EmployeeMainFrame extends JFrame implements EmployeeFrameView {
     public DeleteCustomerPanel deleteCustomerPanel = new DeleteCustomerPanel(this, bankController);
     public CreateAccountPanel createAccountPanel = new CreateAccountPanel(this, bankController);
     public DeleteAccountPanel deleteAccountPanel = new DeleteAccountPanel(this, bankController);
+    public ShowUserAccountsForEmployeePanel showUserAccountsForEmployeePanel = new ShowUserAccountsForEmployeePanel(this,bankController);
+
 
     public EmployeeMainFrame() {
         setTitle("Employee");
@@ -33,12 +34,14 @@ public class EmployeeMainFrame extends JFrame implements EmployeeFrameView {
         add(deleteCustomerPanel, "deleteCustomerPanel");
         add(createAccountPanel, "createAccountPanel");
         add(deleteAccountPanel, "deleteAccountPanel");
+        add(showUserAccountsForEmployeePanel, "showUserAccountsForEmployeePanel");
 
     }
 
     public LoginPanel getLoginPanel(){
         return loginPanel;
     }
+
 
     public void showPanel(String name) {
         CardLayout cl = (CardLayout) getContentPane().getLayout();

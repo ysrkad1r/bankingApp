@@ -37,12 +37,16 @@ public class DeleteAccountPanel extends JPanel implements Resettable {
         add(backToMainMenuButton,"wrap,height 40!,grow");
 
         deleteAccountButton.addActionListener(e -> {
-            int accountId = Integer.parseInt(accountIdField.getText());
-            boolean statusOfDeletion = bankController.deleteAccount(accountId);
-            if (statusOfDeletion) {
-                JOptionPane.showMessageDialog(frame, "Account deleted");
-            }else {
-                JOptionPane.showMessageDialog(frame, "Account not deleted");
+            try {
+                int accountId = Integer.parseInt(accountIdField.getText());
+                boolean statusOfDeletion = bankController.deleteAccount(accountId);
+                if (statusOfDeletion) {
+                    JOptionPane.showMessageDialog(frame, "Account deleted");
+                }else {
+                    JOptionPane.showMessageDialog(frame, "Account could not deleted");
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Account could not deleted");
             }
         });
 

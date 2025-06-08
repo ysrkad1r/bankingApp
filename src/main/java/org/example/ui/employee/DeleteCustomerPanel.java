@@ -37,8 +37,17 @@ public class DeleteCustomerPanel extends JPanel implements Resettable {
         add(backToMainMenuButton,"grow, height 40!, wrap");
 
         deleteButton.addActionListener(e -> {
-            int customerId = Integer.parseInt(accountIdToBeDeleted.getText());
-            bankController.deleteCustomer(customerId);
+            try {
+                int customerId = Integer.parseInt(accountIdToBeDeleted.getText());
+                boolean statusOfDeletion = bankController.deleteCustomer(customerId);
+                if (statusOfDeletion) {
+                    JOptionPane.showMessageDialog(frame, "Customer deleted successfully!");
+                }else {
+                    JOptionPane.showMessageDialog(frame, "Customer could not be deleted!");
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Customer could not be deleted!");
+            }
         });
 
         backToMainMenuButton.addActionListener(e -> {

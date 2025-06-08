@@ -38,13 +38,14 @@ public class CustomerService {
         return false;
     }
 
-    public void deleteCustomer(int customerId) {
+    public boolean deleteCustomer(int customerId) {
         boolean statusOdDeletion = customerDAO.deleteCustomer(customerId);
         if (statusOdDeletion) {
             System.out.println("Customer deleted successfully");
         }else {
             System.out.println("Customer could not be deleted");
         }
+        return statusOdDeletion;
     }
 
     //getter method for DAO for testing not neccessary.

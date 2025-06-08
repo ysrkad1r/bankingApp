@@ -67,13 +67,17 @@ public class CreateAccountPanel extends JPanel implements Resettable {
         refreshAccountList();
 
         createAccountButton.addActionListener(e -> {
-            int customerID = Integer.parseInt(customerId.getText());
-            AccountType accountType = (AccountType) accountTypeDropdown.getSelectedItem();
-            int amount = Integer.parseInt(amountField.getText());
-            boolean status = bankController.handleCreateAccount(customerID,accountType,amount);
-            if(status){
-                JOptionPane.showMessageDialog(null, "Account created successfully");
-            }else {
+            try {
+                int customerID = Integer.parseInt(customerId.getText());
+                AccountType accountType = (AccountType) accountTypeDropdown.getSelectedItem();
+                int amount = Integer.parseInt(amountField.getText());
+                boolean status = bankController.handleCreateAccount(customerID,accountType,amount);
+                if(status){
+                    JOptionPane.showMessageDialog(null, "Account created successfully");
+                }else {
+                    JOptionPane.showMessageDialog(null, "Account creation failed");
+                }
+            } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Account creation failed");
             }
         });

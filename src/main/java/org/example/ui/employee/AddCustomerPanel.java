@@ -63,7 +63,12 @@ public class AddCustomerPanel extends JPanel implements Resettable {
             String email = emailField.getText();
             String password = String.valueOf(passwordField.getPassword());
             Customer customer = new Customer(fullName, email, password);
-            bankController.handleRegisterCustomer(customer);
+            boolean status = bankController.handleRegisterCustomer(customer);
+            if (status) {
+                JOptionPane.showMessageDialog(AddCustomerPanel.this, "Customer Added Successfully!");
+            }else {
+                JOptionPane.showMessageDialog(AddCustomerPanel.this, "Customer could not be added!");
+            }
         });
 
         backToMainMenuButton.addActionListener(e -> {

@@ -73,11 +73,20 @@ public class BankController {
     }
 
 
-    public void handleLogout(Logoutable parentComponent, MainFrameView frame) {
-        JOptionPane.showMessageDialog((Component) parentComponent, "LogOut Successful!");
+    public void handleLogout(JFrame currentFrame) {
+        JOptionPane.showMessageDialog(currentFrame, "Logout Successful!");
+
         SessionManager.getInstance().logOut();
-        frame.getLoginPanel().resetFields();
+
+        currentFrame.dispose(); // EmployeeMainFrame'i kapat
+
+        // Ana giriş ekranı yeniden başlatılır
+        SwingUtilities.invokeLater(() -> {
+            MainFrame mainFrame = new MainFrame();
+            mainFrame.setVisible(true);
+        });
     }
+
 
 
     public boolean handleDepositMoney(String rawAccountId, String rawAmountOfMoney, DepositPanel parentComponent) {
@@ -163,9 +172,18 @@ public class BankController {
                 currentCustomerId = SessionManager.getInstance().getLoggedInUser().getId();
             }
             List<Account> accountList = accountService.getAccountDAO().getAccountById(currentCustomerId);
-            System.out.println(currentCustomerId);
             return accountList;
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Account> getAccountsForCustomer(int customerId) {
+        try {
+            List<Account> accountList = accountService.getAccountDAO().getAccountById(customerId);
+            return accountList;
+        }catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -184,17 +202,18 @@ public class BankController {
 
 
     //it will be unnecessary maybe it will be checked
-    public void handleRegisterCustomer(Customer customer) {
+    public boolean handleRegisterCustomer(Customer customer) {
         boolean statusOfInserting = customerService.registerCustomer(customer.getFullName(),customer.getEmail(),customer.getPassword());
         if (statusOfInserting){
             System.out.println("Customer registered successfully");
         }else {
             System.out.println("Customer registration failed");
         }
+        return statusOfInserting;
     }
 
-    public void deleteCustomer(int customerId) {
-        customerService.deleteCustomer(customerId);
+    public boolean deleteCustomer(int customerId) {
+        return customerService.deleteCustomer(customerId);
     }
 
     public boolean deleteAccount(int accountId) {
